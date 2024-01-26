@@ -5,6 +5,7 @@ import * as S from "./main.style";
 export const MainPage = () => {
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [listEmpty, setListEmpty] = useState(true);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -14,16 +15,23 @@ export const MainPage = () => {
     event.preventDefault();
     getUser(searchQuery)
       .then((data) => {
-        setUserData(data);
+        // Устанавливаем в состояние массив items, а не весь объект
+        setUserData(data.items);
       })
       .catch((error) => {
         console.error("Ошибка при получении данных:", error);
       });
   };
+  
 
-//   useEffect(() => {
-//     getUser();
-//   }, []);
+useEffect(() => {
+  if (userData.length === 0) {
+    setListEmpty(true);
+  } else {
+    setListEmpty(false);
+  }
+}, [userData]);
+
 
 console.log(userData);
   return (
@@ -40,15 +48,15 @@ console.log(userData);
         <S.Search__btn type="submit">Найти</S.Search__btn>
       </S.Search__form>
       <p>Список пользователей GitHub</p>
-      {userData &&
- Array.isArray(userData) &&
- userData.length > 0 &&
- userData.map((user, index) => (
-    <div key={index}>
-   <p>{user.login}ввв</p>
-
-</div>
- ))}
+      {listEmpty ? <p>Список пуст</p> : (
+        <div>
+          {Array.isArray(userData) && userData && userData.map((user, index) => (
+            <div key={index}>
+              <p>{user.login}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
-};
+}
