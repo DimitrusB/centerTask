@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getUser, getUserRepo } from "../../api";
 import * as S from "./main.style";
 
@@ -13,6 +13,8 @@ export const MainPage = () => {
   const [selectedUserURL, setSelectedUserURL] = useState("");
   const [page, setPage] = useState(1);
   const [pageUs, setPageUs] = useState(1);
+  const refdata = useRef();
+  const refuser = useRef();
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -26,6 +28,7 @@ export const MainPage = () => {
     try {
       const repos = await getUserRepo(login, page);
       setSelectedUser(repos);
+      refdata.current.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       console.error("Ошибка при получении данных:", error);
     }
@@ -46,7 +49,7 @@ export const MainPage = () => {
     if (selectedUserLogin) {
       handleSelectUser(selectedUserLogin, selectedUserAvatar, selectedUserURL);
     }
-  }, [page]);
+  }, [page, selectedUserLogin, selectedUserAvatar, selectedUserURL]);
 
   useEffect(() => {
     if (searchQuery) {
@@ -81,7 +84,7 @@ export const MainPage = () => {
         />
         <S.Search__btn type="submit">Найти</S.Search__btn>
       </S.Search__form>
-      <h1>Список пользователей GitHub</h1>
+      <h1 ref={refuser}>Список пользователей GitHub</h1>
       {listEmpty ? (
         <p>Список пуст</p>
       ) : (
@@ -93,6 +96,7 @@ export const MainPage = () => {
                 <S.Name__list key={index}>
                   <S.Img__Main src={user.avatar_url}></S.Img__Main>
                   <p
+                    style={{ cursor: "pointer", marginRight: "15px" }}
                     onClick={() =>
                       handleSelectUser(
                         user.login,
@@ -106,13 +110,22 @@ export const MainPage = () => {
                 </S.Name__list>
               ))}
             <button
-              onClick={() => setPageUs(pageUs - 1)}
+              onClick={() => {
+                setPageUs(pageUs - 1);
+                if (refuser.current) {
+                  refuser.current.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               disabled={pageUs === 1}
             >
               Предыдущая страница
             </button>
             <button
-              onClick={() => setPageUs(pageUs + 1)}
+              onClick={() => {setPageUs(pageUs + 1)
+                if (refuser.current) {
+                  refuser.current.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               disabled={userData.length < 30}
             >
               Следующая страница
@@ -121,7 +134,7 @@ export const MainPage = () => {
           <div>
             {selectUser ? (
               <>
-                <h1>Данные пользователя:</h1>
+                <h1 ref={refdata}>Данные пользователя:</h1>
                 <S.Img__Main
                   src={selectedUserAvatar}
                   alt="Аватар пользователя"
