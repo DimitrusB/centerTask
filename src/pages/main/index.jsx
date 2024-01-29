@@ -12,6 +12,7 @@ export const MainPage = () => {
   const [selectedUserAvatar, setSelectedUserAvatar] = useState("");
   const [selectedUserURL, setSelectedUserURL] = useState("");
   const [page, setPage] = useState(1);
+  const [pageUs, setPageUs] = useState(1);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -32,7 +33,7 @@ export const MainPage = () => {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    getUser(searchQuery)
+    getUser(searchQuery, pageUs)
       .then((data) => {
         setUserData(data.items);
       })
@@ -46,6 +47,18 @@ export const MainPage = () => {
       handleSelectUser(selectedUserLogin, selectedUserAvatar, selectedUserURL);
     }
   }, [page]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      getUser(searchQuery, pageUs)
+        .then((data) => {
+          setUserData(data.items);
+        })
+        .catch((error) => {
+          console.error("Ошибка при получении данных:", error);
+        });
+    }
+  }, [pageUs]);
 
   useEffect(() => {
     if (userData.length === 0) {
@@ -95,6 +108,18 @@ export const MainPage = () => {
                   </p>
                 </S.Name__list>
               ))}
+            <button
+              onClick={() => setPageUs(pageUs - 1)}
+              disabled={pageUs === 1}
+            >
+              Предыдущая страница
+            </button>
+            <button
+              onClick={() => setPageUs(pageUs + 1)}
+              disabled={userData.length < 30}
+            >
+              Следующая страница
+            </button>
           </S.List__ofName>
           <div>
             <h1>Данные пользователя:</h1>

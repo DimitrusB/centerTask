@@ -1,8 +1,8 @@
-const reqUrl = "https://api.github.com/search/users?q";
+const reqUrl = "https://api.github.com/search/users";
 
-export const getUser = async (name) => {
+export const getUser = async (name, page = 1) => {
   try {
-    const result = await fetch(`${reqUrl}=${name}`, {
+    const result = await fetch(`${reqUrl}?q=${name}&page=${page}`, {
       headers: {
         'Authorization': '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'
       }
@@ -14,6 +14,7 @@ export const getUser = async (name) => {
     throw error;
   }
 };
+
 
 
 const reqUrlRepo = "https://api.github.com/users";
