@@ -560,6 +560,7 @@ export const Name__list = styled.div`
 `;
 
 export const List__ofName = styled.div`
+  border-right: solid;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;

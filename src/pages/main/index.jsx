@@ -68,9 +68,6 @@ export const MainPage = () => {
     }
   }, [userData]);
 
-  console.log(userData);
-  console.log(selectedUser);
-
   return (
     <S.Wrapper>
       <h1>Поиск пользователей GitHub</h1>
@@ -122,33 +119,42 @@ export const MainPage = () => {
             </button>
           </S.List__ofName>
           <div>
-            <h1>Данные пользователя:</h1>
-            <S.Img__Main
-              src={selectedUserAvatar}
-              alt="Аватар пользователя"
-            ></S.Img__Main>
-            <p>Логин: {selectedUserLogin}</p>
-            <a href={selectedUserURL} target="block">
-              Git-страница пользователя
-            </a>
-            <div>
-              <h1>Репозитории пользователя :</h1>
-              {Array.isArray(selectedUser) &&
-                selectedUser.map((repo, index) => (
-                  <ul key={index}>
-                    <li>{repo.name}</li>
-                  </ul>
-                ))}
-              <button onClick={() => setPage(page - 1)} disabled={page === 1}>
-                Предыдущая страница
-              </button>
-              <button
-                onClick={() => setPage(page + 1)}
-                disabled={selectedUser.length < 30}
-              >
-                Следующая страница
-              </button>
-            </div>
+            {selectUser ? (
+              <>
+                <h1>Данные пользователя:</h1>
+                <S.Img__Main
+                  src={selectedUserAvatar}
+                  alt="Аватар пользователя"
+                ></S.Img__Main>
+                <p>Логин: {selectedUserLogin}</p>
+                <a href={selectedUserURL} target="block">
+                  Git-страница пользователя
+                </a>
+                <div>
+                  <h1>Репозитории пользователя :</h1>
+                  {Array.isArray(selectedUser) &&
+                    selectedUser.map((repo, index) => (
+                      <ul key={index}>
+                        <li>{repo.name}</li>
+                      </ul>
+                    ))}
+                  <button
+                    onClick={() => setPage(page - 1)}
+                    disabled={page === 1}
+                  >
+                    Предыдущая страница
+                  </button>
+                  <button
+                    onClick={() => setPage(page + 1)}
+                    disabled={selectedUser.length < 30}
+                  >
+                    Следующая страница
+                  </button>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         </S.Main__list>
       )}
