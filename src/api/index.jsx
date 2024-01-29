@@ -18,9 +18,9 @@ export const getUser = async (name) => {
 
 const reqUrlRepo = "https://api.github.com/users";
 
-export const getUserRepo = async (user) => {
+export const getUserRepo = async (user, page = 1) => {
   try {
-    const result = await fetch(`${reqUrlRepo}/${user}/repos` ,{
+    const result = await fetch(`${reqUrlRepo}/${user}/repos?page=${page}` ,{
          headers: {
       'Authorization': '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'
     }
