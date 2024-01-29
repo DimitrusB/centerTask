@@ -27,7 +27,6 @@ export const MainPage = () => {
     event.preventDefault();
     getUser(searchQuery)
       .then((data) => {
-        // Устанавливаем в состояние массив items, а не весь объект
         setUserData(data.items);
       })
       .catch((error) => {
