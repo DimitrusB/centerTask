@@ -201,7 +201,6 @@ export const Search__logoImg = styled.img`
 `;
 
 export const Search__logoMobImg = styled.img`
-
   @media screen and (max-width: 590px) {
     width: 32px;
     height: auto;
@@ -466,8 +465,8 @@ export const Card__image = styled.div`
 `;
 
 export const CardImage = styled.img`
-width: 270px;
-height: 270px;
+  width: 270px;
+  height: 270px;
   display: block;
   -o-object-fit: cover;
   object-fit: cover;
@@ -523,9 +522,9 @@ export const Card__date = styled.p`
   color: #5f5f5f;
 
   @media screen and (max-width: 590px) {
-          font-size: 12px;
-          line-height: 16px;
-          color: #5F5F5F;
+    font-size: 12px;
+    line-height: 16px;
+    color: #5f5f5f;
   }
 `;
 
@@ -538,8 +537,31 @@ export const Card__place = styled.p`
   @media screen and (max-width: 590px) {
     font-size: 12px;
     line-height: 16px;
-    color: #5F5F5F;
-}
+    color: #5f5f5f;
+  }
 `;
 
+export const Main__list = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`;
 
+export const Img__Main = styled.img`
+  width: 55px;
+  height: auto;
+  border-radius: 50%;
+`;
+
+export const Name__list = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const List__ofName = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 15px;
+`;

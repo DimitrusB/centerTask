@@ -1,16 +1,27 @@
 import { useEffect, useState } from "react";
-import { getUser } from "../../api";
+import { getUser, getUserRepo } from "../../api";
 import * as S from "./main.style";
 
 export const MainPage = () => {
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [listEmpty, setListEmpty] = useState(true);
+  const [selectUser, setSelectUser] = useState(false);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
-  
+
+  const handleSelectUser = async (login) => {
+    setSelectUser(true);
+    try {
+      const repos = await getUserRepo(login); 
+      console.log(repos);
+    } catch (error) {
+      console.error('Ошибка при получении данных:', error);
+    }
+  };
+
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     getUser(searchQuery)
@@ -22,18 +33,20 @@ export const MainPage = () => {
         console.error("Ошибка при получении данных:", error);
       });
   };
-  
-
-useEffect(() => {
-  if (userData.length === 0) {
-    setListEmpty(true);
-  } else {
-    setListEmpty(false);
-  }
-}, [userData]);
 
 
-console.log(userData);
+  useEffect(() => {
+    if (userData.length === 0) {
+      setListEmpty(true);
+    } else {
+      setListEmpty(false);
+    }
+  }, [userData]);
+
+  console.log(userData);
+
+
+
   return (
     <>
       <h1>Поиск пользователей GitHub</h1>
@@ -48,15 +61,27 @@ console.log(userData);
         <S.Search__btn type="submit">Найти</S.Search__btn>
       </S.Search__form>
       <p>Список пользователей GitHub</p>
-      {listEmpty ? <p>Список пуст</p> : (
-        <div>
-          {Array.isArray(userData) && userData && userData.map((user, index) => (
-            <div key={index}>
-              <p>{user.login}</p>
-            </div>
-          ))}
-        </div>
+      {listEmpty ? (
+        <p>Список пуст</p>
+      ) : (
+        <S.Main__list>
+          <S.List__ofName>
+            {Array.isArray(userData) &&
+              userData &&
+              userData.map((user, index) => (
+                <S.Name__list key={index}>
+                  <S.Img__Main src={user.avatar_url}></S.Img__Main>
+                  <p onClick={() => handleSelectUser(user.login)}>{user.login}</p>
+                  {Array.isArray(user.repos_url) && user.repos_url && user.repos_url.map((repo, index) =>(
+                    <p key={index}>{repo.length}</p>
+                  ))}
+                </S.Name__list>
+              ))}
+          </S.List__ofName>
+          <p>Данные пользователей:</p>
+          {selectUser ? <p>SelectUser</p> : ""}
+        </S.Main__list>
       )}
     </>
   );
-}
+};
