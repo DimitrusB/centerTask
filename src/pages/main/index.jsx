@@ -77,14 +77,16 @@ export const MainPage = () => {
               ))}
           </S.List__ofName>
           <p>Данные пользователей:</p>
+          <div>
           {Array.isArray(selectedUser) &&
             selectedUser.map((repo, index) => (
-              <div key={index}>
-                <ul>
+
+                <ul key={index}>
                   <li>{repo.name}</li>
                 </ul>
-              </div>
+
             ))}
+                          </div>
         </S.Main__list>
       )}
     </>
