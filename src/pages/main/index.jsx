@@ -7,6 +7,7 @@ export const MainPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [listEmpty, setListEmpty] = useState(true);
   const [selectUser, setSelectUser] = useState(false);
+  const [selectedUser, setSelectedUser] = useState("");
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -15,10 +16,10 @@ export const MainPage = () => {
   const handleSelectUser = async (login) => {
     setSelectUser(true);
     try {
-      const repos = await getUserRepo(login); 
-      console.log(repos);
+      const repos = await getUserRepo(login);
+      setSelectedUser(repos);
     } catch (error) {
-      console.error('Ошибка при получении данных:', error);
+      console.error("Ошибка при получении данных:", error);
     }
   };
 
@@ -34,7 +35,6 @@ export const MainPage = () => {
       });
   };
 
-
   useEffect(() => {
     if (userData.length === 0) {
       setListEmpty(true);
@@ -44,8 +44,7 @@ export const MainPage = () => {
   }, [userData]);
 
   console.log(userData);
-
-
+  console.log(selectedUser);
 
   return (
     <>
@@ -71,15 +70,21 @@ export const MainPage = () => {
               userData.map((user, index) => (
                 <S.Name__list key={index}>
                   <S.Img__Main src={user.avatar_url}></S.Img__Main>
-                  <p onClick={() => handleSelectUser(user.login)}>{user.login}</p>
-                  {Array.isArray(user.repos_url) && user.repos_url && user.repos_url.map((repo, index) =>(
-                    <p key={index}>{repo.length}</p>
-                  ))}
+                  <p onClick={() => handleSelectUser(user.login)}>
+                    {user.login}
+                  </p>
                 </S.Name__list>
               ))}
           </S.List__ofName>
           <p>Данные пользователей:</p>
-          {selectUser ? <p>SelectUser</p> : ""}
+          {Array.isArray(selectedUser) &&
+            selectedUser.map((repo, index) => (
+              <div key={index}>
+                <ul>
+                  <li>{repo.name}</li>
+                </ul>
+              </div>
+            ))}
         </S.Main__list>
       )}
     </>
