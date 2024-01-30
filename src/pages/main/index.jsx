@@ -26,6 +26,9 @@ export const MainPage = () => {
     setSelectedUserAvatar(avatar);
     setSelectedUserURL(url);
     setPage(1);
+  };
+
+  const loadUserRepos = async (login, page) => {
     try {
       const repos = await getUserRepo(login, page);
       setSelectedUser(repos);
@@ -33,7 +36,7 @@ export const MainPage = () => {
     } catch (error) {
       console.error("Ошибка при получении данных:", error);
     }
-  };
+};
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
@@ -48,11 +51,11 @@ export const MainPage = () => {
     })
   };
 
-  useEffect(() => {
-    if (selectedUserLogin) {
-      handleSelectUser(selectedUserLogin, selectedUserAvatar, selectedUserURL);
-    }
-  }, [page, selectedUserLogin, selectedUserAvatar, selectedUserURL]);
+useEffect(() => {
+  if (selectedUserLogin) {
+    loadUserRepos(selectedUserLogin, page);
+  }
+}, [page, selectedUserLogin]);
 
   useEffect(() => {
     if (searchQuery) {
