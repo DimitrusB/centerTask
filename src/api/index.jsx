@@ -4,7 +4,7 @@ export const getUser = async (name, page = 1) => {
   try {
     const result = await fetch(`${reqUrl}?q=${name}&page=${page}`, {
       headers: {
-        'Authorization': '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'
+        'Authorization': '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'
       }
     });
     const data = await result.json();
@@ -23,7 +23,7 @@ export const getUserRepo = async (user, page = 1) => {
   try {
     const result = await fetch(`${reqUrlRepo}/${user}/repos?page=${page}` ,{
          headers: {
-      'Authorization': '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'
+      'Authorization': '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'
     }
   });
     const data = await result.json();
