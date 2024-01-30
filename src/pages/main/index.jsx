@@ -37,12 +37,14 @@ export const MainPage = () => {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     getUser(searchQuery, pageUs)
-      .then((data) => {
+    .then((data) => {
+      if (data && data.items) {
         setUserData(data.items);
-      })
-      .catch((error) => {
-        console.error("Ошибка при получении данных:", error);
-      });
+      } else {
+        setUserData([]);
+        alert('Ведите значение для поиска')
+      }
+    })
   };
 
   useEffect(() => {
