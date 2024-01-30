@@ -77,7 +77,7 @@ export const MainPage = () => {
       <S.Search__form onSubmit={handleSearchSubmit}>
         <S.Search__text
           type="search"
-          placeholder="Поиск по объявлениям"
+          placeholder="Поиск по пользователям"
           name="search"
           onChange={handleSearch}
           value={searchQuery}
