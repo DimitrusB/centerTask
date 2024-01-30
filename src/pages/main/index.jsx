@@ -115,6 +115,7 @@ useEffect(() => {
                   </p>
                 </S.Name__list>
               ))}
+              <S.But_Nav>
             <button
               onClick={() => {
                 setPageUs(pageUs - 1);
@@ -136,6 +137,7 @@ useEffect(() => {
             >
               Следующая страница
             </button>
+            </S.But_Nav>
           </S.List__ofName>
           <div>
             {selectUser ? (
@@ -157,6 +159,7 @@ useEffect(() => {
                         <li>{repo.name}</li>
                       </ul>
                     ))}
+                    <S.But_Nav>
                   <button
                     onClick={() => setPage(page - 1)}
                     disabled={page === 1}
@@ -169,6 +172,7 @@ useEffect(() => {
                   >
                     Следующая страница
                   </button>
+                  </S.But_Nav>
                 </div>
               </>
             ) : (
