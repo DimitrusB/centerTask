@@ -25,6 +25,7 @@ export const MainPage = () => {
     setSelectedUserLogin(login);
     setSelectedUserAvatar(avatar);
     setSelectedUserURL(url);
+    setPage(1);
     try {
       const repos = await getUserRepo(login, page);
       setSelectedUser(repos);
@@ -146,7 +147,7 @@ export const MainPage = () => {
                   Git-страница пользователя
                 </a>
                 <div>
-                  <h1>Репозитории пользователя :</h1>
+                  <h1>Репозитории пользователя ({selectedUser.length} ):</h1>
                   {Array.isArray(selectedUser) &&
                     selectedUser.map((repo, index) => (
                       <ul key={index}>
