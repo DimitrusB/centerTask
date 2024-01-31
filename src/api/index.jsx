@@ -2,7 +2,7 @@ const reqUrl = "https://api.github.com/search/users";
 
 export const getUser = async (name, page = 1) => {
   try {
-    const result = await fetch(`${reqUrl}?q=${name}&page=${page}`, {
+    const result = await fetch(`${reqUrl}?q=${name}&page=${page}&sort=repositories`, {
       headers: {
         'Authorization': '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'
       }
