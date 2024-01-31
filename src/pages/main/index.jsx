@@ -15,6 +15,7 @@ export const MainPage = () => {
   const [pageUs, setPageUs] = useState(1);
   const refdata = useRef();
   const refuser = useRef();
+  const [sorted, setSorted] = useState();
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -36,30 +37,29 @@ export const MainPage = () => {
     } catch (error) {
       console.error("Ошибка при получении данных:", error);
     }
-};
+  };
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    getUser(searchQuery, pageUs)
-    .then((data) => {
+    getUser(searchQuery, pageUs, sorted).then((data) => {
       if (data && data.items) {
         setUserData(data.items);
       } else {
         setUserData([]);
-        alert('Ведите значение для поиска')
+        alert("Ведите значение для поиска");
       }
-    })
+    });
   };
 
-useEffect(() => {
-  if (selectedUserLogin) {
-    loadUserRepos(selectedUserLogin, page);
-  }
-}, [page, selectedUserLogin]);
+  useEffect(() => {
+    if (selectedUserLogin) {
+      loadUserRepos(selectedUserLogin, page);
+    }
+  }, [page, selectedUserLogin]);
 
   useEffect(() => {
     if (searchQuery) {
-      getUser(searchQuery, pageUs)
+      getUser(searchQuery, pageUs, sorted)
         .then((data) => {
           setUserData(data.items);
         })
@@ -67,7 +67,7 @@ useEffect(() => {
           console.error("Ошибка при получении данных:", error);
         });
     }
-  }, [pageUs]);
+  }, [pageUs, sorted]);
 
   useEffect(() => {
     if (userData.length === 0) {
@@ -76,7 +76,7 @@ useEffect(() => {
       setListEmpty(false);
     }
   }, [userData]);
-
+console.log(sorted);
   return (
     <S.Wrapper>
       <h1>Поиск пользователей GitHub</h1>
@@ -96,6 +96,13 @@ useEffect(() => {
       ) : (
         <S.Main__list>
           <S.List__ofName>
+            <button onClick={() => setSorted("sort=repositories&order=desc")}>
+              Сортировать по убыванию
+            </button>
+            <button onClick={() => setSorted("sort=repositories&order=asc")}>
+              Сортировать по возростанию
+            </button>
+
             {Array.isArray(userData) &&
               userData &&
               userData.map((user, index) => (
@@ -115,28 +122,29 @@ useEffect(() => {
                   </p>
                 </S.Name__list>
               ))}
-              <S.But_Nav>
-            <button
-              onClick={() => {
-                setPageUs(pageUs - 1);
-                if (refuser.current) {
-                  refuser.current.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
-              disabled={pageUs === 1}
-            >
-              Предыдущая страница
-            </button>
-            <button
-              onClick={() => {setPageUs(pageUs + 1)
-                if (refuser.current) {
-                  refuser.current.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
-              disabled={userData.length < 30}
-            >
-              Следующая страница
-            </button>
+            <S.But_Nav>
+              <button
+                onClick={() => {
+                  setPageUs(pageUs - 1);
+                  if (refuser.current) {
+                    refuser.current.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                disabled={pageUs === 1}
+              >
+                Предыдущая страница
+              </button>
+              <button
+                onClick={() => {
+                  setPageUs(pageUs + 1);
+                  if (refuser.current) {
+                    refuser.current.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                disabled={userData.length < 30}
+              >
+                Следующая страница
+              </button>
             </S.But_Nav>
           </S.List__ofName>
           <div>
@@ -159,19 +167,19 @@ useEffect(() => {
                         <li>{repo.name}</li>
                       </ul>
                     ))}
-                    <S.But_Nav>
-                  <button
-                    onClick={() => setPage(page - 1)}
-                    disabled={page === 1}
-                  >
-                    Предыдущая страница
-                  </button>
-                  <button
-                    onClick={() => setPage(page + 1)}
-                    disabled={selectedUser.length < 30}
-                  >
-                    Следующая страница
-                  </button>
+                  <S.But_Nav>
+                    <button
+                      onClick={() => setPage(page - 1)}
+                      disabled={page === 1}
+                    >
+                      Предыдущая страница
+                    </button>
+                    <button
+                      onClick={() => setPage(page + 1)}
+                      disabled={selectedUser.length < 30}
+                    >
+                      Следующая страница
+                    </button>
                   </S.But_Nav>
                 </div>
               </>
